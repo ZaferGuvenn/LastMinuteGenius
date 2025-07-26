@@ -79,4 +79,10 @@ dependencies {
     // Compose ile ViewModel enjeksiyonu için
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
+
+    //ffmpeg ses videodan ses çıktısı yapmak için
+    implementation("com.arthenica:ffmpeg-kit-full:6.0-2")
+    implementation("com.arthenica:smart-exception-java:0.2.1")
+
+
 }

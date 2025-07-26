@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.fastthinkerstudios.lastminutegenius.data.processor.VideoProcessor
 import com.fastthinkerstudios.lastminutegenius.data.remote.SummaryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -29,17 +30,30 @@ class MainViewModel @Inject constructor(
                 it.copy(isLoading = true, summary = "")
             }
 
-            //val context = getApplication<Application>().applicationContext
-            val text = videoProcessor.extractTextFromVideo(application, uri)
+            try {
 
-            val summary = summaryRepo.getSummary(text)
+                val audioFile = videoProcessor.extractAudioFile(application, uri)
+                //şimdilik mock cevap
+                val fakeResponse = "Bu, videodan çıkarılan sesin özetidir."
+                delay(1500)
+                //val summary = summaryRepo.uploadAudioForSummary(audioFile)
 
-            _uiState.update {
-                it.copy(
-                    isLoading = false,
-                    summary = summary ?: "Özet alınamadı"
-                )
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        summary = fakeResponse
+                    )
+                }
+
+            }catch (e: Exception){
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        summary = "Hata oluştu: ${e.message}"
+                    )
+                }
             }
+
         }
     }
 

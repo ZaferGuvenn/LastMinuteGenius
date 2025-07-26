@@ -15,10 +15,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
-fun MainScreen(viewModel:MainViewModel = viewModel()) {
+fun MainScreen(viewModel:MainViewModel = hiltViewModel()) {
 
     val uiState by viewModel.uiState.collectAsState()
 

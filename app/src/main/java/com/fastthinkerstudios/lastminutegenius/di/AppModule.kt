@@ -3,6 +3,7 @@ package com.fastthinkerstudios.lastminutegenius.di
 import com.fastthinkerstudios.lastminutegenius.data.processor.VideoProcessor
 import com.fastthinkerstudios.lastminutegenius.data.remote.SummaryApi
 import com.fastthinkerstudios.lastminutegenius.data.remote.SummaryRepository
+import com.fastthinkerstudios.lastminutegenius.util.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,7 +21,7 @@ object AppModule {
     @Singleton
     fun provideRetrofit(): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://localhost:8080/")
+            .baseUrl(Constants.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

@@ -33,15 +33,13 @@ class MainViewModel @Inject constructor(
             try {
 
                 val audioFile = videoProcessor.extractAudioFile(application, uri)
-                //şimdilik mock cevap
-                val fakeResponse = "Bu, videodan çıkarılan sesin özetidir."
-                delay(1500)
-                //val summary = summaryRepo.uploadAudioForSummary(audioFile)
+
+                val summary = summaryRepo.uploadAudioForSummary(audioFile, languageCodeStr = "tr-TR")
 
                 _uiState.update {
                     it.copy(
                         isLoading = false,
-                        summary = fakeResponse
+                        summary = summary
                     )
                 }
 

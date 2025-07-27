@@ -47,9 +47,12 @@ fun MainScreen(viewModel:MainViewModel = hiltViewModel()) {
             uiState.summary.isNotBlank() -> {
                 Text("Video Özeti", style = MaterialTheme.typography.titleMedium)
                 Text(uiState.summary)
+
+                println(uiState.summary)
             }
 
             else -> {
+                Text("Lütfen şimdilik 1 dakikadan kısa videolar gönderin!")
                 Button(onClick = {videoPicker.launch("video/*")}) {
                     Text("Videoyu Seç")
                 }

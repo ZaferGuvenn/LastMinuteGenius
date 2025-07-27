@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "111345706980",
+    "project_id": "lastminutegenius-da04f",
+    "storage_bucket": "lastminutegenius-da04f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:111345706980:android:4d37ffabd677733f12c9f1",
+        "android_client_info": {
+          "package_name": "com.fastthinkerstudios.lastminutegenius"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDoLkODOrjI0CNmjfzauiGctCBCHeLFhBE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

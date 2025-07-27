@@ -5,6 +5,8 @@ plugins {
 
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
+
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -83,6 +85,11 @@ dependencies {
     //ffmpeg ses videodan ses çıktısı yapmak için
     implementation("com.arthenica:ffmpeg-kit-full:6.0-2")
     implementation("com.arthenica:smart-exception-java:0.2.1")
+
+
+    // google firebase
+    implementation(platform("com.google.firebase:firebase-bom:34.0.0"))
+    implementation("com.google.firebase:firebase-analytics")
 
 
 }

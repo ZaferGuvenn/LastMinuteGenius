@@ -52,7 +52,7 @@ fun MainScreen(viewModel:MainViewModel = hiltViewModel()) {
             }
 
             else -> {
-                Text("Lütfen şimdilik 1 dakikadan kısa videolar gönderin!")
+                Text("Transkripti yapılacak videoyu seçin!")
                 Button(onClick = {videoPicker.launch("video/*")}) {
                     Text("Videoyu Seç")
                 }

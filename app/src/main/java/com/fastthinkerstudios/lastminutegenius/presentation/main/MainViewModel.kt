@@ -24,6 +24,8 @@ class MainViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState
 
+    private var languageCodeStr = "tr-TR"
+
     fun onVideoSelected(uri: Uri){
         viewModelScope.launch {
             _uiState.update {
@@ -54,6 +56,11 @@ class MainViewModel @Inject constructor(
 
         }
     }
+
+    fun setLanguageCode(code: String) {
+        languageCodeStr = code
+    }
+
 
 
 

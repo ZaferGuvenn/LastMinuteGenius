@@ -1,6 +1,8 @@
 package com.fastthinkerstudios.lastminutegenius.data.processor
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.media.MediaMetadataRetriever
 import android.net.Uri
 import com.arthenica.ffmpegkit.FFmpegKit
 import com.arthenica.ffmpegkit.ReturnCode
@@ -43,4 +45,32 @@ class VideoProcessor @Inject constructor(){
 
         return outputFile
     }
+
+    fun extractFrames(context: Context, videoUri: Uri): List<File> {
+        val retriever = MediaMetadataRetriever()
+        retriever.setDataSource(context, videoUri)
+
+        val durationMs = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong() ?: 0
+        val frameCount = 5 // Mesela 5 tane al
+        val intervalMs = durationMs / frameCount
+
+        val frameFiles = mutableListOf<File>()
+
+        for (i in 0 until frameCount) {
+            val timeUs = (i * intervalMs) * 1000
+            val bitmap = retriever.getFrameAtTime(timeUs, MediaMetadataRetriever.OPTION_CLOSEST)
+
+            bitmap?.let {
+                val file = File.createTempFile("frame_$i", ".jpg", context.cacheDir)
+                FileOutputStream(file).use { out ->
+                    it.compress(Bitmap.CompressFormat.JPEG, 90, out)
+                }
+                frameFiles.add(file)
+            }
+        }
+
+        retriever.release()
+        return frameFiles
+    }
+
 }

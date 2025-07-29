@@ -14,8 +14,10 @@ interface SummaryApi {
 
     @Multipart
     @POST("summarize")
-    suspend fun summarizeAudio(
+    suspend fun summarizeAudioWithFrames(
         @Part audio: MultipartBody.Part,
-        @Part("language_code") languageCode: RequestBody
+        @Part("language_code") languageCode: RequestBody,
+        @Part frames: List<MultipartBody.Part> // Opsiyonel frame dosyaları
     ): Response<SummaryResponse>
+
 }

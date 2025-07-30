@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,8 +17,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -27,6 +31,8 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -44,6 +50,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsState()
     val enhanced by viewModel.enhancedSummary.collectAsState()
+    val selectedVideoUri by viewModel.selectedVideoUri.collectAsState()
 
     val videoPicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
@@ -120,23 +127,37 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
         }
 
         // Snapshot (thumbnail)
-        viewModel.selectedVideoUri?.let { videoUri ->
+        selectedVideoUri?.let { videoUri ->
             Spacer(modifier = Modifier.height(16.dp))
             Text("📷 Seçilen Video", style = MaterialTheme.typography.bodyMedium)
-            AndroidView(
-                factory = { context ->
-                    ImageView(context).apply {
-                        val retriever = MediaMetadataRetriever()
-                        retriever.setDataSource(context, videoUri)
-                        val bitmap = retriever.frameAtTime
-                        retriever.release()
-                        setImageBitmap(bitmap)
-                        layoutParams = ViewGroup.LayoutParams(400, 300)
-                        scaleType = ImageView.ScaleType.CENTER_CROP
-                    }
-                },
-                modifier = Modifier.padding(8.dp)
-            )
+
+            Box(modifier = Modifier.padding(8.dp)) {
+                AndroidView(
+                    factory = { context ->
+                        ImageView(context).apply {
+                            val retriever = MediaMetadataRetriever()
+                            retriever.setDataSource(context, videoUri)
+                            val bitmap = retriever.frameAtTime
+                            retriever.release()
+                            setImageBitmap(bitmap)
+                            layoutParams = ViewGroup.LayoutParams(400, 300)
+                            scaleType = ImageView.ScaleType.CENTER_CROP
+                        }
+                    },
+                    modifier = Modifier
+                        .height(200.dp)
+                        .fillMaxWidth()
+                )
+
+                IconButton(
+                    onClick = { viewModel.clearSelectedVideoUri() },
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .background(MaterialTheme.colorScheme.surfaceVariant, shape = CircleShape)
+                ) {
+                    Icon(Icons.Default.Close, contentDescription = "Videoyu kaldır")
+                }
+            }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -145,7 +166,7 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
         Button(
             onClick = { viewModel.processSelectedVideo() },
             modifier = Modifier.fillMaxWidth(),
-            enabled = viewModel.selectedVideoUri != null && !uiState.isLoading
+            enabled = selectedVideoUri != null && !uiState.isLoading
         ) {
             Text("🚀 Gönder ve Özetle")
         }

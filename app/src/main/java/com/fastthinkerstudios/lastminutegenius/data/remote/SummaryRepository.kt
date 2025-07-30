@@ -25,9 +25,9 @@ class SummaryRepository @Inject constructor(private val api:SummaryApi) {
         )
         val languageCode = languageCodeStr.toRequestBody("text/plain".toMediaType())
 
-        val frameParts = frames?.mapIndexed { index, file ->
+        val frameParts = frames?.map { file ->
             MultipartBody.Part.createFormData(
-                "frame$index", file.name, file.asRequestBody("image/jpeg".toMediaType())
+                "frames", file.name, file.asRequestBody("image/jpeg".toMediaType())
             )
         } ?: emptyList()
 

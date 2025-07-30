@@ -31,12 +31,16 @@ class MainViewModel @Inject constructor(
     private var languageCodeStr = "tr-TR"
 
     // Video URI saklanıyor
-    private var _selectedVideoUri: Uri? = null
-    val selectedVideoUri: Uri?
-        get() = _selectedVideoUri
+    private val _selectedVideoUri = MutableStateFlow<Uri?>(null)
+    val selectedVideoUri: StateFlow<Uri?> = _selectedVideoUri
+
 
     fun setSelectedVideoUri(uri: Uri) {
-        _selectedVideoUri = uri
+        _selectedVideoUri.value = uri
+    }
+
+    fun clearSelectedVideoUri() {
+        _selectedVideoUri.value = null
     }
 
     fun setEnhancedSummary(enabled: Boolean) {
@@ -48,7 +52,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun processSelectedVideo() {
-        _selectedVideoUri?.let {
+        _selectedVideoUri.value?.let {
             onVideoSelected(it)
         }
     }

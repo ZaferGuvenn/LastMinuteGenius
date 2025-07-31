@@ -1,7 +1,9 @@
 package com.fastthinkerstudios.lastminutegenius.presentation.main
 
 import android.app.Application
+import android.graphics.Bitmap
 import android.net.Uri
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fastthinkerstudios.lastminutegenius.data.processor.VideoProcessor
@@ -34,6 +36,17 @@ class MainViewModel @Inject constructor(
     private val _selectedVideoUri = MutableStateFlow<Uri?>(null)
     val selectedVideoUri: StateFlow<Uri?> = _selectedVideoUri
 
+    private val _selectedFrames = mutableStateListOf<Bitmap>()
+    val selectedFrames: List<Bitmap> get() = _selectedFrames
+
+
+    fun addFrame(bitmap: Bitmap) {
+        if (_selectedFrames.size < 5) _selectedFrames.add(bitmap)
+    }
+
+    fun removeFrameAt(index: Int) {
+        _selectedFrames.removeAt(index)
+    }
 
     fun setSelectedVideoUri(uri: Uri) {
         _selectedVideoUri.value = uri

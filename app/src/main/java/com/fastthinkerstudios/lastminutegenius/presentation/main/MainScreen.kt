@@ -112,16 +112,24 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        VideoSummaryOptions(
-            isEnhancedEnabled = enhanced,
-            onEnhancedOptionChanged = { viewModel.setEnhancedSummary(it) }
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(8.dp)
+        ) {
+            Checkbox(
+                checked = enhanced,
+                onCheckedChange = { if (!uiState.isLoading) viewModel.setEnhancedSummary(it) else null },
+                enabled = !uiState.isLoading
+            )
+            Text("Görsellerle daha kaliteli özet istiyorum")
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
             onClick = { videoPicker.launch("video/*") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !uiState.isLoading
         ) {
             Text("📁 Videoyu Seç")
         }
@@ -158,6 +166,18 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
                     Icon(Icons.Default.Close, contentDescription = "Videoyu kaldır")
                 }
             }
+
+            if (enhanced && selectedVideoUri != null && !uiState.isLoading) {
+                Spacer(modifier = Modifier.height(16.dp))
+                FrameSelector(
+                    videoUri = selectedVideoUri!!,
+                    selectedFrames = viewModel.selectedFrames,
+                    onAddFrame = { viewModel.addFrame(it) },
+                    onRemoveFrame = { viewModel.removeFrameAt(it) }
+                )
+            }
+
+
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -217,23 +237,8 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
             }
         }
     }
-}
 
-@Composable
-fun VideoSummaryOptions(
-    isEnhancedEnabled: Boolean,
-    onEnhancedOptionChanged: (Boolean) -> Unit
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(8.dp)
-    ) {
-        Checkbox(
-            checked = isEnhancedEnabled,
-            onCheckedChange = onEnhancedOptionChanged
-        )
-        Text("Görsellerle daha kaliteli özet istiyorum")
-    }
+
 }
 
 

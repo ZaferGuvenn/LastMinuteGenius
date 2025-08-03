@@ -1,8 +1,15 @@
 package com.fastthinkerstudios.lastminutegenius.di
 
+import android.app.Application
+import androidx.room.Room
+import com.fastthinkerstudios.lastminutegenius.data.local.AppDatabase
 import com.fastthinkerstudios.lastminutegenius.data.processor.VideoProcessor
 import com.fastthinkerstudios.lastminutegenius.data.remote.SummaryApi
+import com.fastthinkerstudios.lastminutegenius.data.repository.CategoryRepositoryImpl
 import com.fastthinkerstudios.lastminutegenius.data.repository.SummaryRepositoryImpl
+import com.fastthinkerstudios.lastminutegenius.data.repository.VideoRepositoryImpl
+import com.fastthinkerstudios.lastminutegenius.domain.repository.CategoryRepository
+import com.fastthinkerstudios.lastminutegenius.domain.repository.VideoRepository
 import com.fastthinkerstudios.lastminutegenius.util.Constants
 import dagger.Module
 import dagger.Provides
@@ -18,8 +25,22 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+    @Provides
+    @Singleton
+    fun provideDatabase(application: Application): AppDatabase{
+        return Room.databaseBuilder(application, AppDatabase::class.java, "VideoSummariesDatabase").build()
+    }
 
 
+    @Provides
+    fun provideCategoryRepository(db: AppDatabase): CategoryRepository{
+        return CategoryRepositoryImpl(db.categoryDao())
+    }
+
+    @Provides
+    fun provideVideoRepository(db: AppDatabase): VideoRepository{
+        return VideoRepositoryImpl(db.videoDao())
+    }
 
     @Provides
     @Singleton

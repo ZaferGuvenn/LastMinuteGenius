@@ -102,5 +102,9 @@ dependencies {
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation("androidx.room:room-ktx:${room_version}")
 
+    // gelişmiş icon paketi için
     implementation("androidx.compose.material:material-icons-extended:1.7.8")
+
+    // videoların snapshootlarını göstermek için
+    implementation("io.coil-kt:coil-compose:2.6.0")
 }

@@ -3,6 +3,7 @@ package com.fastthinkerstudios.lastminutegenius.presentation.videolist
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fastthinkerstudios.lastminutegenius.domain.model.Video
+import com.fastthinkerstudios.lastminutegenius.domain.usecase.video.DeleteVideoUseCase
 import com.fastthinkerstudios.lastminutegenius.domain.usecase.video.GetVideosByCategoryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
@@ -14,7 +15,8 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class VideoListViewModel @Inject constructor(
 
-    private val getVideosByCategoryUseCase: GetVideosByCategoryUseCase
+    private val getVideosByCategoryUseCase: GetVideosByCategoryUseCase,
+    private val deleteVideoUseCase: DeleteVideoUseCase
 
 ): ViewModel() {
 
@@ -26,6 +28,13 @@ class VideoListViewModel @Inject constructor(
             getVideosByCategoryUseCase(categoryId).collect{ videoList->
                 _videos.value = videoList
             }
+        }
+    }
+
+    fun deleteVideo(video: Video){
+        viewModelScope.launch {
+            deleteVideoUseCase(video)
+            loadVideos(video.categoryId)
         }
     }
 }

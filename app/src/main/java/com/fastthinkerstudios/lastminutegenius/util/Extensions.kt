@@ -10,5 +10,5 @@ fun CategoryEntity.toDomain() = Category(id, parentId, name)
 fun Category.toEntity() = CategoryEntity(id, parentId, name)
 
 //Video
-fun VideoEntity.toDomain() = Video(id, snapshot, name, categoryId, isProgressing, summary, uri)
-fun Video.toEntity() = VideoEntity(id, snapshot, name, categoryId, isProgressing, summary, uri)
+fun VideoEntity.toDomain() = Video(id, snapshots, name, categoryId, isProgressing, summary, uri)
+fun Video.toEntity() = VideoEntity(id, snapshots, name, categoryId, isProgressing, summary, uri)

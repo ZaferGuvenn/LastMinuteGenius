@@ -8,10 +8,10 @@ data class VideoEntity(
 
     @PrimaryKey(autoGenerate = true)
     val id:Int=0,
-    val snapshot: String,            // galeriden gelen uri (path)
+    val snapshots: List<String>,
     val name: String,                // video dosya adı
     val categoryId: Int,             // kategoriye ait foreign key
     val isProgressing: Boolean = false,  // özetleme işlemi devam ediyor mu
     val summary: String? = null,     // backend'den gelen özet
-    val uri: String
+    val uri: String                   // galeriden gelen uri path
 )

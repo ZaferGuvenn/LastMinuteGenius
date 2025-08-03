@@ -1,6 +1,7 @@
 package com.fastthinkerstudios.lastminutegenius.presentation.category
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.provider.OpenableColumns
 import androidx.lifecycle.ViewModel
@@ -53,14 +54,23 @@ class CategoryViewModel @Inject constructor(
     }
 
     fun addVideosToCategory(uris: List<Uri>, categoryId: Int, context: Context) {
+
+
         viewModelScope.launch {
             uris.forEach { uri ->
+
+                //kapandığında thumbnail resmi izin alınmazsa kayboluyor ondan
+                context.contentResolver.takePersistableUriPermission(
+                    uri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )//*/
+
                 val name = getFileNameFromUri(context, uri)
                 val video = Video(
                     uri = uri.toString(),
                     name = name,
                     categoryId = categoryId,
-                    snapshot = ""
+                    snapshots = emptyList()
                 )
                 insertVideoUseCase(video)
             }

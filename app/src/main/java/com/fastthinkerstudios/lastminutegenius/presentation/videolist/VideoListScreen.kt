@@ -42,7 +42,10 @@ fun VideoListScreen (
             ){
                 items(videos){ video ->
 
-                    VideoItem(video)
+                    VideoItem(
+                        video,
+                        onDeleteClick = { viewModel.deleteVideo(video) }
+                    )
                 }
             }
         }

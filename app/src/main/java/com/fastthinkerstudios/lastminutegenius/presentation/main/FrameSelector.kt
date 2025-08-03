@@ -29,9 +29,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.fastthinkerstudios.lastminutegenius.data.processor.VideoProcessor
 
 @Composable
 fun FrameSelector(
+    videoProcessor: VideoProcessor,
     videoUri: Uri,
     selectedFrames: List<Bitmap>,
     onAddFrame: (Bitmap) -> Unit,
@@ -41,6 +43,7 @@ fun FrameSelector(
     var currentFrameBitmap by remember { mutableStateOf<Bitmap?>(null) }
     var currentTime by remember { mutableStateOf(0L) }
 
+
     Column(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
         Text("📸 Öne Çıkarılacak Görselleri Seç (max 5)", style = MaterialTheme.typography.bodyMedium)
 
@@ -48,9 +51,9 @@ fun FrameSelector(
             value = currentTime.toFloat(),
             onValueChange = {
                 currentTime = it.toLong()
-                currentFrameBitmap = extractFrameFromVideo(context, videoUri, currentTime)
+                currentFrameBitmap = videoProcessor.extractFrameFromVideo(context, videoUri, currentTime)
             },
-            valueRange = 0f..getVideoDuration(context, videoUri).toFloat(),
+            valueRange = 0f..videoProcessor.getVideoDuration(context, videoUri).toFloat(),
             modifier = Modifier.fillMaxWidth()
         )
 

@@ -1,21 +1,17 @@
-package com.fastthinkerstudios.lastminutegenius.data.remote
+package com.fastthinkerstudios.lastminutegenius.data.repository
 
-import com.fastthinkerstudios.lastminutegenius.domain.model.SummaryRequest
+import com.fastthinkerstudios.lastminutegenius.data.remote.SummaryApi
+import com.fastthinkerstudios.lastminutegenius.domain.repository.SummaryRepository
 import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import okio.IOException
-import retrofit2.http.Body
-import retrofit2.http.POST
 import java.io.File
 import javax.inject.Inject
 
+class SummaryRepositoryImpl @Inject constructor(private val api: SummaryApi): SummaryRepository {
 
-class SummaryRepository @Inject constructor(private val api:SummaryApi) {
-
-    suspend fun uploadAudioForSummary(
+    override suspend fun uploadAudioForSummary(
         audioFile: File,
         languageCodeStr: String,
         frames: List<File>?
@@ -36,7 +32,7 @@ class SummaryRepository @Inject constructor(private val api:SummaryApi) {
         if (response.isSuccessful) {
             return response.body()?.summary ?: "Özet bulunamadı"
         } else {
-            throw IOException("API Hatası: ${response.code()}")
+            throw okio.IOException("API Hatası: ${response.code()}")
         }
     }
 

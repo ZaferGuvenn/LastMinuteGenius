@@ -170,6 +170,7 @@ fun MainScreen(viewModel: MainViewModel = hiltViewModel()) {
             if (enhanced && selectedVideoUri != null && !uiState.isLoading) {
                 Spacer(modifier = Modifier.height(16.dp))
                 FrameSelector(
+                    videoProcessor = viewModel.getVideoProcessor(),
                     videoUri = selectedVideoUri!!,
                     selectedFrames = viewModel.selectedFrames,
                     onAddFrame = { viewModel.addFrame(it) },

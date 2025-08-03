@@ -2,7 +2,7 @@ package com.fastthinkerstudios.lastminutegenius.di
 
 import com.fastthinkerstudios.lastminutegenius.data.processor.VideoProcessor
 import com.fastthinkerstudios.lastminutegenius.data.remote.SummaryApi
-import com.fastthinkerstudios.lastminutegenius.data.remote.SummaryRepository
+import com.fastthinkerstudios.lastminutegenius.data.repository.SummaryRepositoryImpl
 import com.fastthinkerstudios.lastminutegenius.util.Constants
 import dagger.Module
 import dagger.Provides
@@ -45,8 +45,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideSummaryRepository(api: SummaryApi): SummaryRepository{
-        return SummaryRepository(api)
+    fun provideSummaryRepository(api: SummaryApi): SummaryRepositoryImpl{
+        return SummaryRepositoryImpl(api)
     }
 
     @Provides

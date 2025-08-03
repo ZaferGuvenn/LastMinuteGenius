@@ -7,9 +7,8 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fastthinkerstudios.lastminutegenius.data.processor.VideoProcessor
-import com.fastthinkerstudios.lastminutegenius.data.remote.SummaryRepository
+import com.fastthinkerstudios.lastminutegenius.data.repository.SummaryRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -21,7 +20,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val application: Application,
     private val videoProcessor: VideoProcessor,
-    private val summaryRepo: SummaryRepository
+    private val summaryRepo: SummaryRepositoryImpl
 ): ViewModel(){
 
     private val _uiState = MutableStateFlow(UiState())
@@ -39,6 +38,9 @@ class MainViewModel @Inject constructor(
     private val _selectedFrames = mutableStateListOf<Bitmap>()
     val selectedFrames: List<Bitmap> get() = _selectedFrames
 
+
+    // VideoProcessor'ı dışarıya aç
+    fun getVideoProcessor(): VideoProcessor = videoProcessor
 
     fun addFrame(bitmap: Bitmap) {
         if (_selectedFrames.size < 5) _selectedFrames.add(bitmap)

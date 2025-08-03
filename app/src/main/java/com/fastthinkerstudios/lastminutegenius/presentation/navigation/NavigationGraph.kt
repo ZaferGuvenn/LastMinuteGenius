@@ -5,7 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.fastthinkerstudios.lastminutegenius.presentation.category.CategoryScreen
-import com.fastthinkerstudios.lastminutegenius.presentation.videolistscreen.VideoListScreen
+import com.fastthinkerstudios.lastminutegenius.presentation.videolist.VideoListScreen
 
 sealed class Screen(val route: String) {
     object Category : Screen("category")

@@ -1,7 +1,9 @@
-package com.fastthinkerstudios.lastminutegenius.presentation.videolistscreen
+package com.fastthinkerstudios.lastminutegenius.presentation.videolist
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
@@ -10,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
@@ -25,16 +28,26 @@ fun VideoListScreen (
         viewModel.loadVideos(categoryId)
     }
 
-    Column( modifier = Modifier.fillMaxSize()) {
-        Text("Kategori $categoryId için videolar", style = MaterialTheme.typography.headlineSmall)
+    Column( modifier = Modifier.fillMaxSize().padding(16.dp)) {
+        Text(
+            "Kategori ID: $categoryId",
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier.padding(bottom = 12.dp))
 
-        LazyColumn {
-            items(videos){ video ->
+        if (videos.isEmpty()){
+            Text("Bu kategoriye ait video yok.")
+        }else{
+            LazyColumn (
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ){
+                items(videos){ video ->
 
-                Text(video.name) // Şimdilik sadece adı gösterelim
-
+                    VideoItem(video)
+                }
             }
         }
+
+
     }
 
 }

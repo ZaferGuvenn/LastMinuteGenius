@@ -1,4 +1,4 @@
-package com.fastthinkerstudios.lastminutegenius.presentation.videolistscreen
+package com.fastthinkerstudios.lastminutegenius.presentation.videolist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

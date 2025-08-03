@@ -28,7 +28,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 @Composable
 fun CategoryScreen(
     viewModel: CategoryViewModel = hiltViewModel(),
-    onVideoAddClicked: (Int) -> Unit
+    onVideoAddClicked: (Int) -> Unit,
+    onCategoryClicked: (Int) -> Unit
 ) {
     val categories by viewModel.categories.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
@@ -90,7 +91,7 @@ fun CategoryScreen(
                             CategoryItem(
                                 category = category,
                                 onDeleteClick = { viewModel.deleteCategory(category) },
-                                onClicked = {}
+                                onClicked = {onCategoryClicked(category.id)}
                             )
                         }
                     }

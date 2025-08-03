@@ -14,9 +14,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.compose.rememberNavController
 import com.fastthinkerstudios.lastminutegenius.presentation.category.CategoryScreen
 import com.fastthinkerstudios.lastminutegenius.presentation.category.CategoryViewModel
 import com.fastthinkerstudios.lastminutegenius.presentation.main.MainScreen
+import com.fastthinkerstudios.lastminutegenius.presentation.navigation.NavigationGraph
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -26,6 +28,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
+            val navController = rememberNavController()
             val context = LocalContext.current
             val viewModel: CategoryViewModel = hiltViewModel()
 
@@ -53,9 +56,12 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-            CategoryScreen(
-                onVideoAddClicked = { categoryId ->
+            NavigationGraph(
+                navController,
+                onVideoAdd = {  categoryId->
+
                     currentCategoryId = categoryId
+
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         videoPicker13Launcher.launch(
                             PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.VideoOnly)

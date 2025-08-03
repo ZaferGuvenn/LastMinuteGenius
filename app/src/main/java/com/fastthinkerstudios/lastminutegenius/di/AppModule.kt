@@ -33,11 +33,13 @@ object AppModule {
 
 
     @Provides
+    @Singleton
     fun provideCategoryRepository(db: AppDatabase): CategoryRepository{
         return CategoryRepositoryImpl(db.categoryDao())
     }
 
     @Provides
+    @Singleton
     fun provideVideoRepository(db: AppDatabase): VideoRepository{
         return VideoRepositoryImpl(db.videoDao())
     }

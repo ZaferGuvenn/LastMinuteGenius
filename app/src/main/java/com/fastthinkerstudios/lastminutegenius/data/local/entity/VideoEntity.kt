@@ -13,4 +13,5 @@ data class VideoEntity(
     val categoryId: Int,             // kategoriye ait foreign key
     val isProgressing: Boolean = false,  // özetleme işlemi devam ediyor mu
     val summary: String? = null,     // backend'den gelen özet
+    val uri: String
 )

@@ -20,10 +20,6 @@ class CategoryRepositoryImpl(
     }
 
     override fun getAllCategories(): Flow<List<Category>> {
-        return dao.getAllCategories().map {
-            list-> list.map {
-                it.toDomain()
-            }
-        }
+        return dao.getAllCategories().map { list -> list.map { it.toDomain() } }
     }
 }

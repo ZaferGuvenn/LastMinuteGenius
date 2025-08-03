@@ -24,8 +24,6 @@ class VideoRepositoryImpl(
     }
 
     override fun getVideosByCategory(categoryId: Int): Flow<List<Video>> {
-        return dao.getVideosByCategory(categoryId).map {
-            list-> list.map{it.toDomain()}
-        }
+        return dao.getVideosByCategory(categoryId).map { list -> list.map { it.toDomain() } }
     }
 }

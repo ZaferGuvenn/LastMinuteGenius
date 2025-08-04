@@ -35,3 +35,12 @@ fun String.toBitmap(): Bitmap? {
         null
     }
 }
+
+fun String.fromBase64ToBitmap(): Bitmap? {
+    return try {
+        val decodedBytes = Base64.decode(this, Base64.DEFAULT)
+        BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+    } catch (e: Exception) {
+        null
+    }
+}

@@ -15,9 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
-import com.fastthinkerstudios.lastminutegenius.presentation.category.CategoryScreen
 import com.fastthinkerstudios.lastminutegenius.presentation.category.CategoryViewModel
-import com.fastthinkerstudios.lastminutegenius.presentation.main.MainScreen
 import com.fastthinkerstudios.lastminutegenius.presentation.navigation.NavigationGraph
 import dagger.hilt.android.AndroidEntryPoint
 

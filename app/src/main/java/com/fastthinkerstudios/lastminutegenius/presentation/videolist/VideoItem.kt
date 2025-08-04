@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import com.fastthinkerstudios.lastminutegenius.domain.model.Video
 import androidx.core.net.toUri
+import com.fastthinkerstudios.lastminutegenius.util.fromBase64ToBitmap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -73,6 +74,15 @@ fun VideoItem(
                 val frame = getVideoFrameAtPosition(context, video.uri.toUri(), currentPosition)
                 currentFrame = frame
             }
+        }
+    }
+
+    LaunchedEffect(video.snapshots) {
+        if (video.snapshots.isNotEmpty()) {
+            val decodedFrames = video.snapshots.mapNotNull { it.fromBase64ToBitmap() }
+            selectedFrames = decodedFrames
+            checked = true
+            expanded = true
         }
     }
 

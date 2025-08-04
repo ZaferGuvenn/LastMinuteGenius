@@ -38,13 +38,17 @@ fun VideoListScreen (
             Text("Bu kategoriye ait video yok.")
         }else{
             LazyColumn (
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                verticalArrangement = Arrangement.spacedBy(16.dp)
             ){
                 items(videos){ video ->
 
                     VideoItem(
                         video,
-                        onDeleteClick = { viewModel.deleteVideo(video) }
+                        onDeleteClick = { viewModel.deleteVideo(video) },
+                        onFramesSelected = { frames->
+
+                            viewModel.onFramesSelected(video, frames)
+                        }
                     )
                 }
             }

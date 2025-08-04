@@ -1,10 +1,13 @@
 package com.fastthinkerstudios.lastminutegenius.presentation.videolist
 
+import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fastthinkerstudios.lastminutegenius.domain.model.Video
 import com.fastthinkerstudios.lastminutegenius.domain.usecase.video.DeleteVideoUseCase
 import com.fastthinkerstudios.lastminutegenius.domain.usecase.video.GetVideosByCategoryUseCase
+import com.fastthinkerstudios.lastminutegenius.domain.usecase.video.UpdateVideoUseCase
+import com.fastthinkerstudios.lastminutegenius.util.toBase64
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,12 +19,14 @@ import kotlinx.coroutines.launch
 class VideoListViewModel @Inject constructor(
 
     private val getVideosByCategoryUseCase: GetVideosByCategoryUseCase,
-    private val deleteVideoUseCase: DeleteVideoUseCase
+    private val deleteVideoUseCase: DeleteVideoUseCase,
+    private val updateVideoUseCase: UpdateVideoUseCase
 
 ): ViewModel() {
 
     private val _videos = MutableStateFlow<List<Video>>(emptyList())
     val videos : StateFlow<List<Video>> = _videos.asStateFlow()
+
 
     fun loadVideos(categoryId: Int){
         viewModelScope.launch {
@@ -35,6 +40,16 @@ class VideoListViewModel @Inject constructor(
         viewModelScope.launch {
             deleteVideoUseCase(video)
             loadVideos(video.categoryId)
+        }
+    }
+
+    fun onFramesSelected(video: Video, frames: List<Bitmap>) {
+        viewModelScope.launch {
+            val updatedVideo = video.copy(
+                snapshots = frames.map { it.toBase64() }
+            )
+            updateVideoUseCase(updatedVideo)
+            loadVideos(video.categoryId) // Listeyi güncelle
         }
     }
 }

@@ -51,8 +51,11 @@ import kotlinx.coroutines.withContext
 @Composable
 fun VideoItem(
     video: Video,
+    state: UiState,
     onDeleteClick: () -> Unit,
-    onFramesSelected: (List<Bitmap>) -> Unit // Seçilen frameleri dışarı aktarmak için
+    onFramesSelected: (List<Bitmap>) -> Unit,
+    onSummarizeClick: () -> Unit,
+    onShowSummaryClick: () -> Unit
 ) {
     val context = LocalContext.current
     var bitmap by remember { mutableStateOf<Bitmap?>(null) }
@@ -62,268 +65,96 @@ fun VideoItem(
     var selectedFrames by remember { mutableStateOf<List<Bitmap>>(emptyList()) }
     var currentFrame by remember { mutableStateOf<Bitmap?>(null) }
 
+
+    // Load thumbnail
     LaunchedEffect(video.uri) {
-        val parsedUri = video.uri.toUri()
-        bitmap = extractVideoThumbnailCompat(context, parsedUri)
+        bitmap = extractVideoThumbnailCompat(context, video.uri.toUri())
     }
 
-    // Timeline pozisyonu değiştiğinde frame al
+    // Load frame preview when position changes
     LaunchedEffect(currentPosition, expanded) {
         if (expanded) {
-            withContext(Dispatchers.IO) {
-                val frame = getVideoFrameAtPosition(context, video.uri.toUri(), currentPosition)
-                currentFrame = frame
+            currentFrame = withContext(Dispatchers.IO) {
+                getVideoFrameAtPosition(context, video.uri.toUri(), currentPosition)
             }
         }
     }
 
+    // Load saved snapshots
     LaunchedEffect(video.snapshots) {
         if (video.snapshots.isNotEmpty()) {
-            val decodedFrames = video.snapshots.mapNotNull { it.fromBase64ToBitmap() }
-            selectedFrames = decodedFrames
+            selectedFrames = video.snapshots.mapNotNull { it.fromBase64ToBitmap() }
             checked = true
             expanded = true
         }
     }
 
+    LaunchedEffect(selectedFrames) {
+        onFramesSelected(selectedFrames)
+    }
 
     Column {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 4.dp),
-            elevation = CardDefaults.cardElevation(4.dp)
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(12.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                if (bitmap != null) {
-                    Image(
-                        bitmap = bitmap!!.asImageBitmap(),
-                        contentDescription = "Video thumbnail",
-                        modifier = Modifier
-                            .size(128.dp, 84.dp)
-                            .clip(RoundedCornerShape(8.dp))
-                    )
-                } else {
-                    Box(
-                        modifier = Modifier
-                            .size(128.dp)
-                            .clip(RoundedCornerShape(8.dp))
-                            .background(Color.Gray))
-                }
-
-                Spacer(modifier = Modifier.width(12.dp))
-
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(text = video.name, style = MaterialTheme.typography.titleMedium)
-                }
-
-                IconButton(onClick = onDeleteClick) {
-                    Icon(Icons.Default.Delete, contentDescription = "Sil")
-                }
-            }
-        }
-
-        Card(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 4.dp),
+                .padding(4.dp),
             elevation = CardDefaults.cardElevation(4.dp)
         ) {
             Column {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(12.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Checkbox(
-                            checked = checked,
-                            onCheckedChange = { isChecked ->
-                                checked = isChecked
-                                expanded = isChecked
-                            },
-                        )
-                        Text("Görsel seç", modifier = Modifier.padding(start = 8.dp))
-                    }
+                TopRow(
+                    video = video,
+                    bitmap = bitmap,
+                    isLoading = state.isLoading,
+                    onDeleteClick = onDeleteClick
+                )
 
-                    Button(
-                        onClick = { /* Özet çıkarma işlemi */ }
-                    ) {
-                        Text("Özet Çıkar")
-                    }
-                }
+                if (video.summary.isNullOrBlank()) {
+                    SummaryControlSection(
+                        checked = checked,
+                        onCheckedChange = {
+                            checked = it
+                            expanded = it
+                        },
+                        onSummarizeClick = onSummarizeClick
+                    )
 
-                if (expanded) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                            .animateContentSize()
-                    ) {
-                        // Mevcut frame önizlemesi
-                        currentFrame?.let { frame ->
-                            Image(
-                                bitmap = frame.asImageBitmap(),
-                                contentDescription = "Current frame preview",
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(200.dp)
-                                    .clip(RoundedCornerShape(8.dp))
-                            )
-                            Spacer(modifier = Modifier.height(16.dp))
-                        }
-
-                        //ibre
-
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(48.dp)
-                        ) {
-                            var containerWidth by remember { mutableStateOf(0) }
-
-                            // Timeline arka planı
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(48.dp)
-                                    .background(Color.LightGray.copy(alpha = 0.3f))
-                                    .onSizeChanged { containerWidth = it.width }
-                                    .pointerInput(Unit) {
-                                        detectTapGestures { tapOffset ->
-                                            val relativePosition = (tapOffset.x / containerWidth).coerceIn(0f, 1f)
-                                            currentPosition = relativePosition
-                                        }
-                                    }
-                            )
-
-                            if (containerWidth > 0) {
-                                val offsetX = (currentPosition * containerWidth).toInt()
-
-                                // Sabit genişlikte ince ibre (örn: 4.dp)
-                                Box(
-                                    modifier = Modifier
-                                        .offset { IntOffset(offsetX - 2, 0) } // merkezde dursun diye -2
-                                        .width(6.dp)
-                                        .fillMaxHeight()
-                                        .clip(RoundedCornerShape(50))
-                                        .background(Color(0xFFE1BEE7)) // açık mor çizgi
-                                )
-
-                                // Thumb gibi uç nokta
-                                Box(
-                                    modifier = Modifier
-                                        .offset { IntOffset(offsetX - 8, 0) }
-                                        .size(12.dp)
-                                        .align(Alignment.CenterStart)
-                                        .clip(CircleShape)
-                                        .background(Color(0xFF6A1B9A)) // mor thumb
-                                )
-                            }
-                        }
-
-
-                        // Seçilen framelerin küçük görselleri
-                        if (selectedFrames.isNotEmpty()) {
-                            Text("Seçilen Frameler:",
-                                style = MaterialTheme.typography.bodyMedium,
-                                modifier = Modifier.padding(top = 8.dp))
-
-                            LazyRow(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 8.dp),
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
-                            ) {
-                                itemsIndexed(selectedFrames) { index, frame ->
-                                    Box(
-                                        modifier = Modifier
-                                            .size(80.dp)
-                                    ) {
-                                        Image(
-                                            bitmap = frame.asImageBitmap(),
-                                            contentDescription = "Selected frame",
-                                            modifier = Modifier
-                                                .fillMaxSize()
-                                                .clip(RoundedCornerShape(4.dp))
-                                        )
-                                        IconButton(
-                                            onClick = {
-                                                selectedFrames = selectedFrames.toMutableList().apply {
-                                                    removeAt(index)
-                                                }
-                                            },
-                                            modifier = Modifier
-                                                .align(Alignment.TopEnd)
-                                                .size(24.dp)
-                                        ) {
-                                            Icon(
-                                                Icons.Default.Close,
-                                                contentDescription = "Frame kaldır",
-                                                tint = Color.Red,
-                                                modifier = Modifier.size(16.dp)
-                                            )
-                                        }
+                    if (expanded) {
+                        FrameSelector(
+                            currentFrame = currentFrame,
+                            selectedFrames = selectedFrames,
+                            currentPosition = currentPosition,
+                            onPositionChange = { currentPosition = it },
+                            onAddFrame = {
+                                currentFrame?.let {
+                                    if (selectedFrames.size < 5) {
+                                        selectedFrames = selectedFrames + it
                                     }
                                 }
+                            },
+                            onClearAll = { selectedFrames = emptyList() },
+                            onRemoveFrameAt = { index ->
+                                selectedFrames = selectedFrames.toMutableList().apply {
+                                    removeAt(index)
+                                }
                             }
-                        }
-
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceEvenly
-                        ) {
-                            Button(
-                                onClick = {
-                                    currentFrame?.let { frame ->
-                                        if (selectedFrames.size < 5) {
-                                            selectedFrames = selectedFrames + frame
-                                        }
-                                    }
-                                },
-                                enabled = selectedFrames.size < 5 && currentFrame != null
-                            ) {
-                                Text("Frame Ekle (${selectedFrames.size}/5)")
-                            }
-
-                            Button(
-                                onClick = {
-                                    selectedFrames = emptyList()
-                                },
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = MaterialTheme.colorScheme.secondary
-                                ),
-                                enabled = selectedFrames.isNotEmpty()
-                            ) {
-                                Text("Tümünü Temizle")
-                            }
-                        }
+                        )
                     }
+                } else {
+                    SummarySection(onShowSummaryClick)
                 }
             }
         }
     }
-
-    // Seçilen frameleri dışarı aktar
-    LaunchedEffect(selectedFrames) {
-        onFramesSelected(selectedFrames)
-    }
 }
+
 
 fun extractVideoThumbnailCompat(context: Context, uri: Uri): Bitmap? {
     return try {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-        // SDK 29 ve üzeri için ContentResolver#loadThumbnail
+            // SDK 29 ve üzeri için ContentResolver#loadThumbnail
             context.contentResolver.loadThumbnail(uri, Size(128, 128), null)
         } else {
-        // SDK 24-28 için MediaMetadataRetriever
+            // SDK 24-28 için MediaMetadataRetriever
             val retriever = MediaMetadataRetriever()
             val fd = context.contentResolver.openFileDescriptor(uri, "r")?.fileDescriptor
             if (fd != null) {

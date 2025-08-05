@@ -1,5 +1,6 @@
 package com.fastthinkerstudios.lastminutegenius.util
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
@@ -8,6 +9,8 @@ import com.fastthinkerstudios.lastminutegenius.data.local.entity.VideoEntity
 import com.fastthinkerstudios.lastminutegenius.domain.model.Category
 import com.fastthinkerstudios.lastminutegenius.domain.model.Video
 import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.FileOutputStream
 
 //Category
 fun CategoryEntity.toDomain() = Category(id, parentId, name)
@@ -43,4 +46,12 @@ fun String.fromBase64ToBitmap(): Bitmap? {
     } catch (e: Exception) {
         null
     }
+}
+
+fun Bitmap.toTempFile(context: Context): File {
+    val file = File.createTempFile("frame_", ".jpg", context.cacheDir)
+    FileOutputStream(file).use { out ->
+        compress(Bitmap.CompressFormat.JPEG, 90, out)
+    }
+    return file
 }

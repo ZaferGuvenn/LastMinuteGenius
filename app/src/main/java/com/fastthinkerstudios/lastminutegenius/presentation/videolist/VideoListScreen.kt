@@ -22,6 +22,7 @@ fun VideoListScreen (
 ){
 
     val videos by viewModel.videos.collectAsState()
+    val videoStates by viewModel.videoStates.collectAsState()
 
 
     LaunchedEffect(categoryId) {
@@ -44,10 +45,17 @@ fun VideoListScreen (
 
                     VideoItem(
                         video,
+                        state = videoStates[video.id]?:UiState(),
                         onDeleteClick = { viewModel.deleteVideo(video) },
                         onFramesSelected = { frames->
 
                             viewModel.onFramesSelected(video, frames)
+                        },
+                        onSummarizeClick = { viewModel.summarizeVideo(video) },
+                        onShowSummaryClick = {
+                            println("video.summary")
+                            println(video.summary)
+
                         }
                     )
                 }

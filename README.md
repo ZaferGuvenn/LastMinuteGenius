@@ -8,9 +8,11 @@
 ## 📲 Download & Try It
 
 - 📱 **[Download APK](https://drive.google.com/file/d/1sgewP1MF868QcCsFDlRYOlP-B-8qcKH2/view?usp=sharing)**
-- 🧬 **Clone the Repository:**
+
+
 
 ---
+- 🧬 **Clone the Repository:**
 
 ⚠️ Developer Note: Google Cloud Credentials
 This project includes a backend that uses Google Cloud services (such as Speech-to-Text and Gemini). For security reasons, the original Google Cloud service account key (.json file) has been removed from the repository.

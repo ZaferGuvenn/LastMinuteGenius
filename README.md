@@ -31,7 +31,6 @@ git clone https://github.com/ZaferGuvenn/LastMinuteGenius.git
 
 🧱 Modern Stack: Jetpack Compose, Retrofit, Room, FastAPI (Cloud Run), and Firebase.
 
-🖼️ Screenshots
 ## 🖼️ Screenshots
 
 ### 1. Summary Screen  
@@ -57,6 +56,8 @@ git clone https://github.com/ZaferGuvenn/LastMinuteGenius.git
 
 ### 8. Final Summary & Test Result  
 <img src="screenshots/8.jpeg" width="300"/>
+
+
 📹 Demo Video
 Watch the full walkthrough here: https://www.youtube.com/watch?v=a6wiAR-3vsM
 📺 YouTube Demo

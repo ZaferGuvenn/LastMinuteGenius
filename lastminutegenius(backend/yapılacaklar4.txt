@@ -1,0 +1,1 @@
+önceki dosyadaki seçilen model ile birlikte main.py requirements güncellendi. Şimdi ise ilgili temizlenmiş transkripti alıp bunu geminiye yine bir özet geç şeklinde sorup kullanıcıya çıktıyı o şekilde vermeliyiz.

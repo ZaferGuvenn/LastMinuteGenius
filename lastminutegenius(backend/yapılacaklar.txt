@@ -1,0 +1,54 @@
+
+1- Uygulamadan galeri ile video seçme işlemi
+2- Bu videoyu işlemek için gerekli teknolojileri araştır
+3- Summary textini google cloud run ile gemini ye sor
+4- Gemini çıktısını alıp kullanıcıya göster
+
+
+/***************
+google cloud run ile fast api ayarı:
+/***************
+
+proje dosyalarını oluştur:
+
+-proje
+  -main.py=fast api vs olacak
+  -requirements.txt= gerekli kütüphaneleri indirmek için
+  -Dockerfile= içerisinde ip konfigurasyonu falan var
+
+google cloud run, google cli sdk terminalini indirdikten
+https://cloud.google.com/sdk/docs/install
+
+sonra aşağıdaki komutlar:
+
+
+gcloud auth login = giriş
+gcloud config set project lastminutegenius-da04f = projeni seç
+gcloud config get-value project = seçili projeyi göster
+
+
+sonra proje klasöründeyken submit edelim
+gcloud builds submit --project=lastminutegenius-da04f --region=europe-west1 --tag gcr.io/lastminutegenius-da04f/audio-summary-api
+
+
+sonra deploy edelim
+gcloud run deploy audio-summary-api --image gcr.io/lastminutegenius-da04f/audio-summary-api --platform managed --region europe-west1 --allow-unauthenticated
+
+
+hızlı ikisini çağırdığın komut:
+gcloud builds submit --tag gcr.io/lastminutegenius-da04f/audio-summary-api
+gcloud run deploy audio-summary-api --image gcr.io/lastminutegenius-da04f/audio-summary-api --platform managed --region europe-west1 --allow-unauthenticated
+
+//not: bu deploy ve submit süreci sırasında birçok hata alabilirsin, logları kontrol edip çözümü araştırman gerek.
+
+örnek curl komutu için 16hz wav dosyası olmalı:
+
+curl -X POST https://audio-summary-api-111345706980.europe-west1.run.app/summarize `
+  -H "Content-Type: multipart/form-data" `
+  -F "audio=@messi16.wav" `
+  -F "language_code=es-ES"
+
+örnek çıktı:
+
+{"summary":"en mi día a día o en el entrenamiento o partido en mi vida la verdad que no no cambió absolutamente nada no lo único que sigue puedo decir que que soy que somos campeones del mundo que tenemos una estrella más en la historia de los mundiales y que como decía antes que no me falta nada por conseguir que lo conseguí todo"}
+

@@ -1,0 +1,25 @@
+gs://lastminute-audio/ bucketi oluştur ama cli da
+projeyi seçip aşağıdaki komutu gir
+gsutil mb -p lastminutegenius-da04f -l europe-west1 gs://lastminute-audio
+
+
+peki neden:
+Android’ten gelen WAV dosyasını geçici olarak kaydet
+
+GCS’e yükle → gs://lastminute-audio/uploads/messi16.wav gibi bir URI oluşur
+
+Bu URI'yi long_running_recognize() fonksiyonuna gönder
+
+Çıkan metni (transkript) döndür
+
+- main py dosyasını güncelledik
+- requirements dosyasına google-cloud-storage==2.15.0 ekledik
+
+gcloud builds submit --tag gcr.io/lastminutegenius-da04f/audio-summary-api
+gcloud run deploy audio-summary-api --image gcr.io/lastminutegenius-da04f/audio-summary-api --platform managed --region europe-west1 --allow-unauthenticated
+
+çalıştıralım.
+
+Bu seferki durumda 5 dakikalık matematik videosu androidden gönderildiğinde çıktı şu oluyor:
+
+"Hocam -2 tane 2 tane bulursak bunun adı çift katlı olmuyor mu? O da aynı denklemden bir sayı 2 defa bulursan onu Nazar kaşar. Çift katlı kök tür eşitsizlikler ne oluyor küçüktür büyüktür şimdi herkes grubu bulursun 1.4 bulursun ama üstü çift olanlar mutlak değerler her zaman çift katlı kök tur haberiniz olsun olay Anlaşıldı mı Sonra bulduğun değerleri sayı doğrusuna gösteriyorsunuz. En küçüğü -2 - 2 ay sonra 1 gr sonra 4 kere sonra 6 gelecek. Kadıköy kadar Çift çizgi dizidir. Sonra işaret bulunur. Dersi büyük olan ilk sırada artı var. Artı varsa mutlak değer olsun.  Artı var çarpımları 6 olur. Ensar'a yazdır. Artan sonra işaret değişmez. Yine artı işaret değişir - çift katlı kök yine tek katlı kök artı olay Anlaşıldı mı yüzüklere taktık arkadaşlar eksik olmasaydı zaten hepsi boş eşitlikten dolayı paydayı sıfır yapan 1'e 4 boş 1.4 boş Diğer ikisi de olur. Benden ne istiyorsun sıfırdan küçükleri istiyorsun sıfırdan küçük evler arkadaşlar neresidir? Bir şu Aralık - 2 ile yarış bir şurası şurası başka yok zaten - 2 ile 1 - 2 kapalı kutu 1 ile 4 arasında bir de açık 4'te açık birleşim arkadaşlar Sen bu 6'yı boşuna mı karaladın kadın var yıkadık yıkadık Burayı da sen kapalı kutu yapmıştım almıştım 6'yı da alacaksınız birleşim 6 sorun bitmiştir. Umarım anlaşılmıştır. Arkadaşlar bu soruya iki tane  Diyoruz sistemlerden çözüm kümesi bulunurken bunun köklerini bulduk dörder -2 bunun kökeni bulduk 2 - 21 - 3 2 tane sayı doğrusu gösterdim. Üstünkök 63 Günaydın hocam en küçük -2 hem üstüne düşmüş 6 ay olduğuna ve halka takarak almış anlayabiliyorsun -2 hem üstünkörü hemen hem Altıntepe hocam. 2 tane bulursak bunun adı çift katlı olmuyor mu? O da aynı denklemden bir bulursan onu Nazar kaşar çift katlı kök tür Tamam Tamam hepsini Teker teker yazdım üsttekiler düz tekne Ait Oldu 4 - 2 bakım kör değilsin ki Alt tarafı köklerde -32 ve için işaret artı artı kendi kötü değil eksi artı 6 kendi kötü - kendi kötü artık kendi kök eksi üstü raf  Artarak aralar Mustafacığım ben sıfırdan küçüğüm ikisinin ortak çözüm kümesi şuarası değil mi? - sonsuzdan - 3 arasıdır arkadaşlar mantık bu olay bu trafik verir ister + 1/2 küçük eşittir 0 ayrı yazarım diğerleri isterseniz ne demek istediğim iki tane arkadaşa şu şekilde denklem sildim. Şuna etiketledim. Şu da x artı 1 eksi için o ayrı bu ayrı tüm etiketleri eksik 2 3 ve 5'tir. -2 şurası 365 tek tek tek tek tek tek tek tek tek tek tek tek tek taktık kime ait olur bu?  Hepsi Bir Şu arada bir yerde Yüzüğü taktık ikimiz Şu arada bir de yüzük taktık şimdi 5 negatif Geliyor musunuz - 5 - 2 arasında pozitif eksik giden sonra yine mal ne olmuş Ne kadar geldik diğerine + y + yapmazdı kartı kökünü gördü - kökünü gördü Art kabağım şimdi ne diyor Diyor ki çarpımları 0 dan küçük olsun Şu için trafik sıfırdan küçük mü fikrin çarpma Hayır mı evet mi? Evet mi hayır mı? Evet çay içtik olmasaydı hepsi boştu eşitlikten dolayı paydayı sıfır yapan iki boş şu iki boş Diğerleri hepsi de olan bana hepsini dolduran arkadaşlar iken dışındaki  Eksi sonsuz artı eksi kanalı 1'den 3 arası a3d da hisse ona - 1 dakika arası dedim. Arasa dahil ya bir takılır Olay bitti Arkadaşlar bu kadar da geçmiş olsun."

@@ -1,6 +1,6 @@
 package com.fastthinkerstudios.lastminutegenius.data.repository
 
-import com.fastthinkerstudios.lastminutegenius.data.remote.SummaryApi
+import com.fastthinkerstudios.lastminutegenius.data.remote.api.SummaryApi
 import com.fastthinkerstudios.lastminutegenius.domain.repository.SummaryRepository
 import com.fastthinkerstudios.lastminutegenius.util.GcsUploader
 import okhttp3.MediaType.Companion.toMediaType

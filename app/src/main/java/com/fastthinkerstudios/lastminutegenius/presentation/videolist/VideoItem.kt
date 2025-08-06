@@ -55,7 +55,8 @@ fun VideoItem(
     onDeleteClick: () -> Unit,
     onFramesSelected: (List<Bitmap>) -> Unit,
     onSummarizeClick: () -> Unit,
-    onShowSummaryClick: () -> Unit
+    onShowSummaryClick: () -> Unit,
+    onTakeQuizClick: () -> Unit
 ) {
     val context = LocalContext.current
     var bitmap by remember { mutableStateOf<Bitmap?>(null) }
@@ -140,7 +141,10 @@ fun VideoItem(
                         )
                     }
                 } else {
-                    SummarySection(onShowSummaryClick)
+                    SummarySection(
+                        onShowSummaryClick,
+                        onTakeQuizClick
+                    )
                 }
             }
         }

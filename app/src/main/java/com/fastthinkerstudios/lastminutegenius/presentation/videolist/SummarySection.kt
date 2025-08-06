@@ -13,14 +13,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun SummarySection(onShowSummaryClick: () -> Unit) {
+fun SummarySection(onShowSummaryClick: () -> Unit,
+                   onTakeQuizClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally)
     ) {
-        Button(onClick = onShowSummaryClick, enabled = false) {
+        Button(onClick = onTakeQuizClick) {
             Text("Kısa Sınav Yap")
         }
         Button(onClick = onShowSummaryClick) {

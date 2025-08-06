@@ -1,14 +1,19 @@
 package com.fastthinkerstudios.lastminutegenius.di
 
+import QuizRepositoryImpl
 import android.app.Application
 import androidx.room.Room
 import com.fastthinkerstudios.lastminutegenius.data.local.AppDatabase
+import com.fastthinkerstudios.lastminutegenius.data.local.dao.QuizDao
+import com.fastthinkerstudios.lastminutegenius.data.local.dao.VideoDao
 import com.fastthinkerstudios.lastminutegenius.data.processor.VideoProcessor
-import com.fastthinkerstudios.lastminutegenius.data.remote.SummaryApi
+import com.fastthinkerstudios.lastminutegenius.data.remote.api.QuizApi
+import com.fastthinkerstudios.lastminutegenius.data.remote.api.SummaryApi
 import com.fastthinkerstudios.lastminutegenius.data.repository.CategoryRepositoryImpl
 import com.fastthinkerstudios.lastminutegenius.data.repository.SummaryRepositoryImpl
 import com.fastthinkerstudios.lastminutegenius.data.repository.VideoRepositoryImpl
 import com.fastthinkerstudios.lastminutegenius.domain.repository.CategoryRepository
+import com.fastthinkerstudios.lastminutegenius.domain.repository.QuizRepository
 import com.fastthinkerstudios.lastminutegenius.domain.repository.VideoRepository
 import com.fastthinkerstudios.lastminutegenius.util.Constants
 import dagger.Module
@@ -24,6 +29,30 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
+
+    @Provides
+    fun provideQuizDao(db: AppDatabase): QuizDao = db.quizDao()
+
+    @Provides
+    fun provideVideoDao(db: AppDatabase): VideoDao = db.videoDao()
+
+
+
+    @Provides
+    @Singleton
+    fun provideQuizApi(retrofit: Retrofit): QuizApi =
+        retrofit.create(QuizApi::class.java)
+
+    @Provides
+    @Singleton
+    fun provideQuizRepository(
+        quizApi: QuizApi,
+        quizDao: QuizDao,
+        videoDao: VideoDao
+    ): QuizRepository {
+        return QuizRepositoryImpl(quizApi, quizDao, videoDao)
+    }
 
     @Provides
     @Singleton

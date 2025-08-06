@@ -1,4 +1,4 @@
-package com.fastthinkerstudios.lastminutegenius.data.remote
+package com.fastthinkerstudios.lastminutegenius.data.remote.api
 
 import com.fastthinkerstudios.lastminutegenius.data.remote.dto.SummaryResponseDto
 import okhttp3.MultipartBody

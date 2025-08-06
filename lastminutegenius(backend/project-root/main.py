@@ -163,3 +163,44 @@ def extract_between_tags(text: str, start_tag="[[[ÖZET]]]", end_tag="[[[SON]]]"
     if match:
         return match.group(1).strip()
     return text.strip()  # fallback: tüm metni döndür
+
+
+def generate_quiz_from_summary(summary: str) -> str:
+    prompt = f"""
+Aşağıdaki özet metne göre 5-10 adet çoktan seçmeli sınav sorusu oluştur.
+
+Her sorunun:
+- 1 doğru cevabı ve
+- 3 yanlış cevabı olmalı.
+- Formatı JSON olarak döndür:
+[[[QUIZ]]]
+[
+  {{
+    "soru": "Soru metni",
+    "secenekler": ["A", "B", "C", "D"],
+    "dogru": "A"
+  }},
+  ...
+]
+[[[END]]]
+
+Özet:
+{summary}
+    """
+
+    model = genai.GenerativeModel("gemini-2.5-pro")
+    response = model.generate_content(prompt)
+    return extract_between_tags(response.text, "[[[QUIZ]]]", "[[[END]]]")
+
+
+@app.post("/generate_quiz")
+async def generate_quiz(summary: str = Form(...)):
+    try:
+        quiz_json = generate_quiz_from_summary(summary)
+        return {"quiz": quiz_json}
+    except Exception as e:
+        logger.error("❌ Quiz oluşturma hatası", exc_info=True)
+        return JSONResponse(
+            status_code=500,
+            content={"error": str(e)}
+        )

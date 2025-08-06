@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.fastthinkerstudios.lastminutegenius.presentation.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,6 +31,7 @@ fun VideoListScreen (
     navController: NavHostController,
     categoryId:Int,
     onShowSummaryClicked: (Int) -> Unit,
+    onTakeQuizClicked: (Int) -> Unit,
     viewModel: VideoListViewModel= hiltViewModel()
 ){
 
@@ -60,11 +62,6 @@ fun VideoListScreen (
                 .padding(innerPadding)
                 .padding(16.dp)
         ) {
-            Text(
-                "Kategori ID: $categoryId",
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(bottom = 12.dp)
-            )
 
             if (videos.isEmpty()) {
                 Text("Bu kategoriye ait video yok.")
@@ -79,7 +76,8 @@ fun VideoListScreen (
                                 viewModel.onFramesSelected(video, frames)
                             },
                             onSummarizeClick = { viewModel.summarizeVideo(video) },
-                            onShowSummaryClick = { onShowSummaryClicked(video.id) }
+                            onShowSummaryClick = { onShowSummaryClicked(video.id) },
+                            onTakeQuizClick = { onTakeQuizClicked(video.id)}
                         )
                     }
                 }

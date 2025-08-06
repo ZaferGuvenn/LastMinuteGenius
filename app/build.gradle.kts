@@ -113,4 +113,8 @@ dependencies {
     // video ses dosyaları storage içine kaydet
     implementation("com.google.firebase:firebase-auth") // anonim auth için
     implementation("com.google.firebase:firebase-storage")
+
+
+    // theme ayarları için
+    implementation("androidx.compose.material3:material3:1.3.0")
 }

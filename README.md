@@ -1,36 +1,84 @@
-# Video Summarizer & Question Generator with Gemini AI
+# 🎬 AI-Powered Video Summarizer & Quiz Generator
 
-This application leverages Gemini's artificial intelligence to summarize any selected video and generate relevant questions based on the summary.
+This Android application uses the power of **Gemini AI**, **Google Cloud Speech-to-Text**, and **Firebase** to help users **summarize educational videos**, **generate questions**, and **prepare quickly for exams**.
 
-## Features
+---
 
-- 🎥 Video content summarization
-- ❓ Automatic question generation from summaries
-- ⚡ Quick exam preparation tool
-- 🎓 Particularly useful for lecture videos
-- 🔍 Filters out unnecessary details from long lectures
+## 🚀 Key Features
 
-## Ideal For
+- 🎥 **Video-to-Audio Extraction**: Extracts audio from videos using `FFmpeg` and uploads it to Firebase Storage securely.
+- 📄 **AI-Generated Summaries**: Uses Google's Speech-to-Text API + Gemini AI to generate smart, human-like summaries from transcribed audio.
+- 🖼️ **Visual Context Enhancement**: Users can select up to 5 frames from the video to send along with audio, improving summary accuracy with visual cues.
+- ✅ **Quiz Generation**: Summaries can be sent to a secondary API endpoint to generate multiple-choice questions with answers.
+- 📝 **Summary Editing**: Users can edit AI-generated summaries before saving them for future study.
+- 📦 **Offline Storage**: All summaries, questions, and metadata are stored locally using Room database.
+- 🛠️ Built with **Jetpack Compose**, **Retrofit**, **Room**, **Firebase Auth & Storage**, and **FastAPI (Cloud Run)** on the backend.
 
-- Students preparing for exams
-- Educators creating study materials
-- Researchers analyzing video content
-- Anyone who needs to quickly understand video content
+---
 
-## User Responsibility
+## 📱 How It Works
 
-⚠️ **Important Notice:**  
-This app only processes content stored on the user's device. The user is solely responsible for ensuring that all processed content complies with copyright regulations. 
+1. **Select a Video**  
+   Choose a video from your gallery.
 
-The developer of this application cannot be held responsible for any copyright violations that may arise from uploaded or analyzed videos. Please ensure you have the right to use and analyze any video content before processing it with this application.
+2. **Extract & Upload Audio**  
+   The app converts the video to a `.flac` audio file using FFmpeg and uploads it to Firebase Storage using anonymous authentication.
 
-## How to Use
+3. **Choose Visual Aids (Optional)**  
+   Select up to 5 key video frames to help Gemini produce a more accurate and contextual summary.
 
-1. Select a video file from your device
-2. The app will process the content using Gemini AI
-3. Receive your summary and generated questions
-4. Use the materials for your study or research
+4. **AI Summary Generation**  
+   Firebase link and optional images are sent to a FastAPI app on Cloud Run. Audio is transcribed using Google Speech-to-Text, then sent (with images if available) to Gemini for summarization.
 
-## Support
+5. **Edit & Save Summary**  
+   Edit the output if needed, and store it locally for future use.
 
-For any questions or issues, please open an issue in this repository.
+6. **Generate Quiz**  
+   Send the summary to another FastAPI function to receive a short multiple-choice quiz. Great for quick study sessions!
+
+---
+
+## 👩‍⚖️ Legal & User Responsibility
+
+> ⚠️ **Important Notice**  
+> All media content uploaded by the user (including video frames and audio files) is processed via Firebase and Google Cloud infrastructure. These files are not publicly shared but are temporarily stored for processing.
+>
+> By using this application, the **user confirms** that they:
+>
+> - Have the legal right to use and process the selected videos.
+> - Take full responsibility for the uploaded content.
+> - Understand that summaries and questions are generated based on that content and are for personal or educational use only.
+>
+> The developer assumes **no liability** for any copyright infringements, misuse of generated content, or any data uploaded by the user.
+
+---
+
+## 👥 Ideal For
+
+- 🎓 Students preparing for exams
+- 🧑‍🏫 Educators creating summaries and practice questions
+- 📊 Content reviewers and researchers
+- 🧠 Anyone wanting to **understand complex video content quickly**
+
+---
+
+## 🧪 Technologies Used
+
+- Android with Kotlin & Jetpack Compose
+- Firebase Storage & Authentication
+- Retrofit + Room for local data handling
+- FFmpeg for audio extraction
+- FastAPI (Cloud Run) as backend
+- Google Cloud Speech-to-Text
+- Gemini API for summarization and question generation
+
+---
+
+## 📥 Installation & Usage
+
+> The app is not yet on the Play Store.
+
+To test or build manually:
+
+```bash
+git clone https://github.com/your-repo/video-summarizer-app.git

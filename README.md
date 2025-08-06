@@ -1,5 +1,4 @@
 
-markdown
 # 🎬 Last Minute Genius — AI-Powered Video Summarizer & Quiz Generator
 
 **Last Minute Genius** is an Android app that helps students, educators, and curious minds understand video content faster through AI-generated summaries and interactive quizzes. With a smart blend of audio transcription, visual frame analysis, and Gemini AI, you can turn any educational video into meaningful study material in minutes.
@@ -33,7 +32,31 @@ git clone https://github.com/ZaferGuvenn/LastMinuteGenius.git
 🧱 Modern Stack: Jetpack Compose, Retrofit, Room, FastAPI (Cloud Run), and Firebase.
 
 🖼️ Screenshots
-<!-- Add screenshots below --> <p align="center"> <img src="screenshots/summary_screen.png" width="250"> <img src="screenshots/frame_selector.png" width="250"> <img src="screenshots/quiz_screen.png" width="250"> </p>
+## 🖼️ Screenshots
+
+### 1. Summary Screen  
+<img src="screenshots/1.jpeg" width="300"/>
+
+### 2. Frame Selection  
+<img src="screenshots/2.jpeg" width="300"/>
+
+### 3. Frame Preview  
+<img src="screenshots/3.jpeg" width="300"/>
+
+### 4. Upload in Progress  
+<img src="screenshots/4.jpeg" width="300"/>
+
+### 5. Audio Transcription & Gemini  
+<img src="screenshots/5.jpeg" width="300"/>
+
+### 6. Editable Summary  
+<img src="screenshots/6.jpeg" width="300"/>
+
+### 7. Quiz Question Preview  
+<img src="screenshots/7.jpeg" width="300"/>
+
+### 8. Final Summary & Test Result  
+<img src="screenshots/8.jpeg" width="300"/>
 📹 Demo Video
 Watch the full walkthrough here: https://www.youtube.com/watch?v=a6wiAR-3vsM
 📺 YouTube Demo

@@ -12,13 +12,20 @@
 
 ---
 
-> ⚠️ **Note: Google Cloud Key Required**
->
-> This project uses Google Cloud API services for tasks such as speech processing and summarization via the backend folder.
-> For security reasons, the `.json` Google Cloud key file has been removed from the repository.
->
-> **To run the project successfully, you must create your own Google Cloud project and generate a service account key file.**
-> Place this file appropriately within the backend directory to enable the related features.
+⚠️ Developer Note: Google Cloud Credentials
+This project includes a backend that uses Google Cloud services (such as Speech-to-Text and Gemini). For security reasons, the original Google Cloud service account key (.json file) has been removed from the repository.
+
+If you clone this project and intend to use the backend:
+
+You must create your own Google Cloud service account key.
+
+Enable the required Google APIs (e.g., Speech-to-Text, Gemini, Cloud Storage).
+
+Replace the key file in the backend's configuration.
+
+Deploy the backend to your own environment (e.g., Cloud Run).
+
+🔒 The mobile app (APK) does not contain the key and will continue to work as long as the backend endpoints remain the same.
 
 ```bash
 git clone https://github.com/ZaferGuvenn/LastMinuteGenius.git

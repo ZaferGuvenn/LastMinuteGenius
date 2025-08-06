@@ -1,84 +1,106 @@
-# 🎬 AI-Powered Video Summarizer & Quiz Generator
 
-This Android application uses the power of **Gemini AI**, **Google Cloud Speech-to-Text**, and **Firebase** to help users **summarize educational videos**, **generate questions**, and **prepare quickly for exams**.
+markdown
+# 🎬 Last Minute Genius — AI-Powered Video Summarizer & Quiz Generator
 
----
-
-## 🚀 Key Features
-
-- 🎥 **Video-to-Audio Extraction**: Extracts audio from videos using `FFmpeg` and uploads it to Firebase Storage securely.
-- 📄 **AI-Generated Summaries**: Uses Google's Speech-to-Text API + Gemini AI to generate smart, human-like summaries from transcribed audio.
-- 🖼️ **Visual Context Enhancement**: Users can select up to 5 frames from the video to send along with audio, improving summary accuracy with visual cues.
-- ✅ **Quiz Generation**: Summaries can be sent to a secondary API endpoint to generate multiple-choice questions with answers.
-- 📝 **Summary Editing**: Users can edit AI-generated summaries before saving them for future study.
-- 📦 **Offline Storage**: All summaries, questions, and metadata are stored locally using Room database.
-- 🛠️ Built with **Jetpack Compose**, **Retrofit**, **Room**, **Firebase Auth & Storage**, and **FastAPI (Cloud Run)** on the backend.
+**Last Minute Genius** is an Android app that helps students, educators, and curious minds understand video content faster through AI-generated summaries and interactive quizzes. With a smart blend of audio transcription, visual frame analysis, and Gemini AI, you can turn any educational video into meaningful study material in minutes.
 
 ---
 
-## 📱 How It Works
+## 📲 Download & Try It
 
-1. **Select a Video**  
-   Choose a video from your gallery.
-
-2. **Extract & Upload Audio**  
-   The app converts the video to a `.flac` audio file using FFmpeg and uploads it to Firebase Storage using anonymous authentication.
-
-3. **Choose Visual Aids (Optional)**  
-   Select up to 5 key video frames to help Gemini produce a more accurate and contextual summary.
-
-4. **AI Summary Generation**  
-   Firebase link and optional images are sent to a FastAPI app on Cloud Run. Audio is transcribed using Google Speech-to-Text, then sent (with images if available) to Gemini for summarization.
-
-5. **Edit & Save Summary**  
-   Edit the output if needed, and store it locally for future use.
-
-6. **Generate Quiz**  
-   Send the summary to another FastAPI function to receive a short multiple-choice quiz. Great for quick study sessions!
-
----
-
-## 👩‍⚖️ Legal & User Responsibility
-
-> ⚠️ **Important Notice**  
-> All media content uploaded by the user (including video frames and audio files) is processed via Firebase and Google Cloud infrastructure. These files are not publicly shared but are temporarily stored for processing.
->
-> By using this application, the **user confirms** that they:
->
-> - Have the legal right to use and process the selected videos.
-> - Take full responsibility for the uploaded content.
-> - Understand that summaries and questions are generated based on that content and are for personal or educational use only.
->
-> The developer assumes **no liability** for any copyright infringements, misuse of generated content, or any data uploaded by the user.
-
----
-
-## 👥 Ideal For
-
-- 🎓 Students preparing for exams
-- 🧑‍🏫 Educators creating summaries and practice questions
-- 📊 Content reviewers and researchers
-- 🧠 Anyone wanting to **understand complex video content quickly**
-
----
-
-## 🧪 Technologies Used
-
-- Android with Kotlin & Jetpack Compose
-- Firebase Storage & Authentication
-- Retrofit + Room for local data handling
-- FFmpeg for audio extraction
-- FastAPI (Cloud Run) as backend
-- Google Cloud Speech-to-Text
-- Gemini API for summarization and question generation
-
----
-
-## 📥 Installation & Usage
-
-> The app is not yet on the Play Store.
-
-To test or build manually:
+- 📱 **[Download APK](https://drive.google.com/file/d/1sgewP1MF868QcCsFDlRYOlP-B-8qcKH2/view?usp=sharing)**
+- 🧬 **Clone the Repository:**
 
 ```bash
-git clone https://github.com/your-repo/video-summarizer-app.git
+git clone https://github.com/ZaferGuvenn/LastMinuteGenius.git
+✨ Features
+🎥 Video to Audio: Converts videos to .flac format using FFmpeg.
+
+🔊 Cloud-Based Audio Processing: Uploads the audio securely to Firebase Storage.
+
+🖼️ Visual Enhancement: Select up to 5 key frames to enrich the AI’s context understanding.
+
+🧠 AI Summarization: Combines Google STT + Gemini API to produce natural, readable summaries.
+
+📝 Editable Summaries: Modify summaries directly inside the app.
+
+❓ Quiz Generator: Instantly create multiple-choice questions from any summary.
+
+💾 Local Storage: Save everything offline using Room DB.
+
+🔐 Anonymous Firebase Auth: No login needed to use core features.
+
+🧱 Modern Stack: Jetpack Compose, Retrofit, Room, FastAPI (Cloud Run), and Firebase.
+
+🖼️ Screenshots
+<!-- Add screenshots below --> <p align="center"> <img src="screenshots/summary_screen.png" width="250"> <img src="screenshots/frame_selector.png" width="250"> <img src="screenshots/quiz_screen.png" width="250"> </p>
+📹 Demo Video
+Watch the full walkthrough here: https://www.youtube.com/watch?v=a6wiAR-3vsM
+📺 YouTube Demo
+
+🚀 How It Works
+Select a Video from your gallery.
+
+The app extracts audio via FFmpeg and uploads it to Firebase Storage anonymously.
+
+You can optionally select 1–5 video frames to improve summary quality.
+
+Backend on Cloud Run (FastAPI) fetches the audio from the Firebase link and transcribes it using Google STT.
+
+Transcribed text + selected images are sent to Gemini AI for summarization.
+
+View, edit, and save the summary.
+
+Generate a quiz based on the summary to test yourself before an exam.
+
+👥 Ideal For
+🧑‍🎓 Students cramming before exams
+
+👩‍🏫 Educators creating quick revision material
+
+📊 Researchers analyzing lecture or tutorial videos
+
+🧠 Anyone wanting to save time while studying visual content
+
+👮 Legal & User Responsibility
+⚠️ Important Notice
+All uploaded media (audio and image frames) are temporarily stored and processed via Firebase and Google Cloud services.
+
+By using this app, the user agrees that:
+
+They own or have legal rights to use and process the selected video content.
+
+They take full responsibility for any content uploaded to cloud services.
+
+Summaries and questions are for personal/educational use only.
+
+The developer holds no liability for copyright issues, misuse of the content, or third-party data processing.
+
+🧪 Tech Stack
+Layer	Technology
+UI	Jetpack Compose
+Local DB	Room
+Network	Retrofit
+Auth	Firebase Anonymous Auth
+Storage	Firebase Storage
+Audio	FFmpeg (on-device)
+Backend	FastAPI on Google Cloud Run
+Transcribe	Google Speech-to-Text API
+Summarize	Gemini AI (Google Generative AI)
+
+🤝 Contributing
+Coming soon...
+
+📩 Support
+For issues, feature requests, or feedback:
+👉 Open an issue on GitHub
+
+📜 License
+pgsql
+Düzenle
+MIT License
+
+This project is intended for educational and personal use only.
+By uploading media, you confirm you own or are authorized to use such content.
+The developer assumes no liability for any misuse or legal issues arising from user-submitted content.
+Made with ❤️ by Zafer Güven

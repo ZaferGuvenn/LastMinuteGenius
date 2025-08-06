@@ -10,6 +10,14 @@
 - 📱 **[Download APK](https://drive.google.com/file/d/1sgewP1MF868QcCsFDlRYOlP-B-8qcKH2/view?usp=sharing)**
 - 🧬 **Clone the Repository:**
 
+> ⚠️ **Note: Google Cloud Key Required**
+>
+> This project uses Google Cloud API services for tasks such as speech processing and summarization via the backend folder.
+> For security reasons, the `.json` Google Cloud key file has been removed from the repository.
+>
+> **To run the project successfully, you must create your own Google Cloud project and generate a service account key file.**
+> Place this file appropriately within the backend directory to enable the related features.
+
 ```bash
 git clone https://github.com/ZaferGuvenn/LastMinuteGenius.git
 ✨ Features

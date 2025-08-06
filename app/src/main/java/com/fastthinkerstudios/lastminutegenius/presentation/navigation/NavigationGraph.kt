@@ -40,6 +40,7 @@ fun NavigationGraph(
 
             val categoryId = backStackEntry.arguments?.getString("categoryId")?.toIntOrNull() ?: return@composable
             VideoListScreen(
+                navController,
                 categoryId = categoryId,
                 onShowSummaryClicked = { videoId->
 
@@ -53,7 +54,7 @@ fun NavigationGraph(
         composable(Screen.Summary.route) { backStackEntry ->
             val videoId = backStackEntry.arguments?.getString("videoId")?.toIntOrNull() ?: return@composable
 
-            SummaryScreen(videoId = videoId)
+            SummaryScreen(navController,videoId = videoId)
         }
 
 

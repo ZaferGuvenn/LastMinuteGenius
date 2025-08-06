@@ -54,44 +54,40 @@ fun TimelineSlider(
         modifier = Modifier
             .fillMaxWidth()
             .height(48.dp)
-    ) {
-        // Arka plan çizgisi
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp)
-                .background(Color.LightGray.copy(alpha = 0.3f))
-                .onSizeChanged { containerWidth = it.width }
-                .pointerInput(Unit) {
-                    detectTapGestures { tapOffset ->
-                        val relativePosition = (tapOffset.x / containerWidth).coerceIn(0f, 1f)
-                        onPositionChange(relativePosition)
-                    }
+            .padding(horizontal = 8.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .onSizeChanged { containerWidth = it.width }
+            .pointerInput(Unit) {
+                detectTapGestures { tapOffset ->
+                    val relative = (tapOffset.x / containerWidth).coerceIn(0f, 1f)
+                    onPositionChange(relative)
                 }
-        )
-
+            }
+    ) {
         if (containerWidth > 0) {
             val offsetX = (currentPosition * containerWidth).toInt()
 
-            // İbre çizgisi
+            // Çizgi
             Box(
                 modifier = Modifier
-                    .offset { IntOffset(offsetX - 2, 0) }
-                    .width(6.dp)
+                    .offset { IntOffset(offsetX - 1, 0) }
+                    .width(4.dp)
                     .fillMaxHeight()
-                    .clip(RoundedCornerShape(50))
-                    .background(Color(0xFFE1BEE7)) // Açık mor çizgi
+                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.6f))
+                    .align(Alignment.CenterStart)
             )
 
             // Thumb (uç nokta)
             Box(
                 modifier = Modifier
-                    .offset { IntOffset(offsetX - 8, 0) }
-                    .size(12.dp)
-                    .align(Alignment.CenterStart)
+                    .offset { IntOffset(offsetX - 16, 0) }
+                    .size(16.dp)
                     .clip(CircleShape)
-                    .background(Color(0xFF6A1B9A)) // Mor thumb
+                    .background(MaterialTheme.colorScheme.primary)
+                    .align(Alignment.CenterStart)
             )
         }
     }
 }
+

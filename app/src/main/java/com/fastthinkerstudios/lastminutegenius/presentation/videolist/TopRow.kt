@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -37,25 +38,25 @@ fun TopRow(video: Video, bitmap: Bitmap?, isLoading: Boolean, onDeleteClick: () 
             .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if (isLoading) {
-            CircularProgressIndicator(modifier = Modifier.size(24.dp))
-        }
-
-        if (bitmap != null) {
-            Image(
-                bitmap = bitmap.asImageBitmap(),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(128.dp, 84.dp)
-                    .clip(RoundedCornerShape(8.dp))
-            )
-        } else {
-            Box(
-                modifier = Modifier
-                    .size(128.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(Color.Gray)
-            )
+        Box(
+            modifier = Modifier
+                .size(128.dp, 84.dp)
+                .clip(RoundedCornerShape(8.dp)),
+            contentAlignment = Alignment.Center
+        ) {
+            when {
+                isLoading -> CircularProgressIndicator(modifier = Modifier.size(24.dp))
+                bitmap != null -> Image(
+                    bitmap = bitmap.asImageBitmap(),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize()
+                )
+                else -> Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color.Gray)
+                )
+            }
         }
 
         Spacer(modifier = Modifier.width(12.dp))
@@ -71,3 +72,4 @@ fun TopRow(video: Video, bitmap: Bitmap?, isLoading: Boolean, onDeleteClick: () 
         }
     }
 }
+

@@ -55,16 +55,20 @@ fun FrameSelector(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp)
-                    .clip(RoundedCornerShape(8.dp))
+                    .clip(RoundedCornerShape(12.dp))
             )
             Spacer(modifier = Modifier.height(16.dp))
         }
 
-        // timeline + thumb
         TimelineSlider(currentPosition = currentPosition, onPositionChange = onPositionChange)
 
         if (selectedFrames.isNotEmpty()) {
-            Text("Seçilen Frameler:", style = MaterialTheme.typography.bodyMedium)
+            Text(
+                "Seçilen Kareler",
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(top = 12.dp)
+            )
+
             LazyRow(
                 modifier = Modifier.padding(vertical = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -76,7 +80,7 @@ fun FrameSelector(
                             contentDescription = null,
                             modifier = Modifier
                                 .fillMaxSize()
-                                .clip(RoundedCornerShape(4.dp))
+                                .clip(RoundedCornerShape(8.dp))
                         )
                         IconButton(
                             onClick = { onRemoveFrameAt(index) },
@@ -97,17 +101,21 @@ fun FrameSelector(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            Button(onClick = onAddFrame, enabled = selectedFrames.size < 5 && currentFrame != null) {
+            Button(
+                onClick = onAddFrame,
+                enabled = selectedFrames.size < 5 && currentFrame != null
+            ) {
                 Text("Frame Ekle (${selectedFrames.size}/5)")
             }
 
             Button(
                 onClick = onClearAll,
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary),
-                enabled = selectedFrames.isNotEmpty()
+                enabled = selectedFrames.isNotEmpty(),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
             ) {
                 Text("Tümünü Temizle")
             }
         }
     }
 }
+

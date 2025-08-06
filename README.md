@@ -10,6 +10,8 @@
 - 📱 **[Download APK](https://drive.google.com/file/d/1sgewP1MF868QcCsFDlRYOlP-B-8qcKH2/view?usp=sharing)**
 - 🧬 **Clone the Repository:**
 
+---
+
 > ⚠️ **Note: Google Cloud Key Required**
 >
 > This project uses Google Cloud API services for tasks such as speech processing and summarization via the backend folder.

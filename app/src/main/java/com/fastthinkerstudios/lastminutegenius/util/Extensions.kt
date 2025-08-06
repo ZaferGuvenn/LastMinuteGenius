@@ -11,6 +11,7 @@ import com.fastthinkerstudios.lastminutegenius.domain.model.Video
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
+import androidx.core.graphics.scale
 
 //Category
 fun CategoryEntity.toDomain() = Category(id, parentId, name)
@@ -21,11 +22,19 @@ fun VideoEntity.toDomain() = Video(id, snapshots, name, categoryId, isProgressin
 fun Video.toEntity() = VideoEntity(id, snapshots, name, categoryId, isProgressing, summary, uri)
 
 
+// bitmapin boyutunu küçültüp ideal boyuta ayarlayalım.
+fun Bitmap.resize(maxSize: Int = 480): Bitmap {
+    val ratio = width.toFloat() / height
+    val newWidth = if (ratio > 1) maxSize else (maxSize * ratio).toInt()
+    val newHeight = if (ratio > 1) (maxSize / ratio).toInt() else maxSize
+    return this.scale(newWidth, newHeight)
+}
+
 // Entity için önce Bitmap'i String'e çeviren ve tersini yapan extension'lar
 // Room db içerisine video snapshootları kaydetme işlemi için
 fun Bitmap.toBase64(): String {
     val byteArrayOutputStream = ByteArrayOutputStream()
-    this.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+    this.compress(Bitmap.CompressFormat.PNG, 70, byteArrayOutputStream)
     val byteArray = byteArrayOutputStream.toByteArray()
     return Base64.encodeToString(byteArray, Base64.DEFAULT)
 }

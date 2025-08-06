@@ -26,4 +26,12 @@ class VideoRepositoryImpl(
     override fun getVideosByCategory(categoryId: Int): Flow<List<Video>> {
         return dao.getVideosByCategory(categoryId).map { list -> list.map { it.toDomain() } }
     }
+
+    override fun getVideoSummaryByVideoId(videoId: Int): Flow<String?> {
+        return dao.getSummaryByVideoId(videoId)
+    }
+
+    override suspend fun updateVideoSummaryByVideoId(videoId: Int, newSummary: String) {
+        return dao.updateSummaryByVideoId(videoId,newSummary)
+    }
 }

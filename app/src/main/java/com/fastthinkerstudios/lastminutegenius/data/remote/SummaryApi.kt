@@ -18,4 +18,14 @@ interface SummaryApi {
         @Part frames: List<MultipartBody.Part> // Opsiyonel frame dosyaları
     ): Response<SummaryResponseDto>
 
+
+    // yeni backende gcs üzerinden link ile ses dosyasını gönderme
+    // ( büyük dosyalarda sorun yaşamamak için.)
+    @Multipart
+    @POST("summarize_by_gcs")
+    suspend fun summarizeFromGcsUri(
+        @Part("gcs_uri") gcsUri: RequestBody,
+        @Part("language_code") languageCode: RequestBody,
+        @Part frames: List<MultipartBody.Part> = emptyList()
+    ): Response<SummaryResponseDto>
 }

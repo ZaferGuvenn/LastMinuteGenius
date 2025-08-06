@@ -108,4 +108,9 @@ dependencies {
 
     // videoların snapshootlarını göstermek için
     implementation("io.coil-kt:coil-compose:2.6.0")
+
+
+    // video ses dosyaları storage içine kaydet
+    implementation("com.google.firebase:firebase-auth") // anonim auth için
+    implementation("com.google.firebase:firebase-storage")
 }

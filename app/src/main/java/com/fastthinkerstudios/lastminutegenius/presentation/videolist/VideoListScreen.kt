@@ -18,6 +18,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 @Composable
 fun VideoListScreen (
     categoryId:Int,
+    onShowSummaryClicked: (Int) -> Unit,
     viewModel: VideoListViewModel= hiltViewModel()
 ){
 
@@ -53,8 +54,8 @@ fun VideoListScreen (
                         },
                         onSummarizeClick = { viewModel.summarizeVideo(video) },
                         onShowSummaryClick = {
-                            println("video.summary")
-                            println(video.summary)
+
+                            onShowSummaryClicked(video.id)
 
                         }
                     )

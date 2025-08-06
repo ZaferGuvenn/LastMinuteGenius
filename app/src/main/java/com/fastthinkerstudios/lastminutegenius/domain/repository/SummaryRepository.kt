@@ -4,9 +4,9 @@ import java.io.File
 
 interface SummaryRepository {
 
-    suspend fun uploadAudioForSummary(
-        audioFile: File,
-        languageCodeStr: String,
+    suspend fun uploadAudioUriForSummary(
+        gcsUri: String,
+        languageCode: String,
         frames: List<File>?
     ): String
 }

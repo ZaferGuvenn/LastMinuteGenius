@@ -2,24 +2,24 @@ package com.fastthinkerstudios.lastminutegenius.data.repository
 
 import com.fastthinkerstudios.lastminutegenius.data.remote.SummaryApi
 import com.fastthinkerstudios.lastminutegenius.domain.repository.SummaryRepository
+import com.fastthinkerstudios.lastminutegenius.util.GcsUploader
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
+import java.io.IOException
 import javax.inject.Inject
 
 class SummaryRepositoryImpl @Inject constructor(private val api: SummaryApi): SummaryRepository {
 
-    override suspend fun uploadAudioForSummary(
-        audioFile: File,
-        languageCodeStr: String,
+    override suspend fun uploadAudioUriForSummary(
+        gcsUri: String,
+        languageCode: String,
         frames: List<File>?
     ): String {
-        val audioPart = MultipartBody.Part.createFormData(
-            "audio", audioFile.name, audioFile.asRequestBody("audio/wav".toMediaType())
-        )
-        val languageCode = languageCodeStr.toRequestBody("text/plain".toMediaType())
+        val languagePart = languageCode.toRequestBody("text/plain".toMediaType())
+        val gcsUriPart = gcsUri.toRequestBody("text/plain".toMediaType())
 
         val frameParts = frames?.map { file ->
             MultipartBody.Part.createFormData(
@@ -27,12 +27,12 @@ class SummaryRepositoryImpl @Inject constructor(private val api: SummaryApi): Su
             )
         } ?: emptyList()
 
-        val response = api.summarizeAudioWithFrames(audioPart, languageCode, frameParts)
+        val response = api.summarizeFromGcsUri(gcsUriPart, languagePart, frameParts)
 
         if (response.isSuccessful) {
             return response.body()?.summary ?: "Özet bulunamadı"
         } else {
-            throw okio.IOException("API Hatası: ${response.code()}")
+            throw IOException("API Hatası: ${response.code()}")
         }
     }
 

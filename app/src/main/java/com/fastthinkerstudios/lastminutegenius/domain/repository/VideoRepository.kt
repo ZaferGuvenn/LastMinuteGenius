@@ -9,4 +9,7 @@ interface VideoRepository {
     suspend fun deleteVideo(video: Video)
     suspend fun updateVideo(video: Video)
     fun getVideosByCategory(categoryId: Int): Flow<List<Video>>
+
+    fun getVideoSummaryByVideoId(videoId:Int): Flow<String?>
+    suspend fun updateVideoSummaryByVideoId(videoId:Int, newSummary:String)
 }

@@ -12,7 +12,9 @@ import com.fastthinkerstudios.lastminutegenius.domain.model.Video
 import com.fastthinkerstudios.lastminutegenius.domain.usecase.video.DeleteVideoUseCase
 import com.fastthinkerstudios.lastminutegenius.domain.usecase.video.GetVideosByCategoryUseCase
 import com.fastthinkerstudios.lastminutegenius.domain.usecase.video.UpdateVideoUseCase
+import com.fastthinkerstudios.lastminutegenius.util.GcsUploader
 import com.fastthinkerstudios.lastminutegenius.util.fromBase64ToBitmap
+import com.fastthinkerstudios.lastminutegenius.util.resize
 import com.fastthinkerstudios.lastminutegenius.util.toBase64
 import com.fastthinkerstudios.lastminutegenius.util.toTempFile
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -68,7 +70,11 @@ class VideoListViewModel @Inject constructor(
     fun onFramesSelected(video: Video, frames: List<Bitmap>) {
         viewModelScope.launch {
             val updatedVideo = video.copy(
-                snapshots = frames.map { it.toBase64() }
+                snapshots = frames.map {
+                    it.resize()//bitmapi ideal boyuta ayarlayalım
+                    it.toBase64()//bitmapin string türünde vt ye kaydedilmeye müsait hali
+
+                }
             )
             updateVideoUseCase(updatedVideo)
             loadVideos(video.categoryId) // Listeyi güncelle
@@ -79,70 +85,57 @@ class VideoListViewModel @Inject constructor(
     ///özeti backendden alma işlemleri
     fun summarizeVideo(video: Video) {
         viewModelScope.launch {
-            println("özetleniyor..")
-            _videoStates.update { it + (video.id to UiState(isLoading = true)) }
-
             try {
-                println("videoişlemleri0")
+                println("özetleniyor..")
+                _videoStates.update { it + (video.id to UiState(isLoading = true)) }
 
-                // 1. IO thread’de işlemler
-                val (audioFile, frameFiles) = withContext(Dispatchers.IO) {
-                    val audio = videoProcessor.extractAudioFile(application, video.uri.toUri())
-
-                    val frames = if (video.snapshots.isNotEmpty()) {
-                        video.snapshots.mapNotNull { base64 ->
-                            base64.fromBase64ToBitmap()?.toTempFile(application)
-                        }
-                    } else null
-
-                    audio to frames
+                // 1. Ses dosyasını çıkar
+                val audioFile = withContext(Dispatchers.IO) {
+                    videoProcessor.extractAudioFile(application, video.uri.toUri())
                 }
 
-                println("videoişlemleri2")
+                // 2. Firebase Storage'a yükle ve GCS URI al
+                val gcsUri = withContext(Dispatchers.IO) {
+                    GcsUploader.uploadFlacToGcs(audioFile)
+                        ?: throw Exception("GCS URI alınamadı")
+                }
 
-                // 2. IO: API'ye gönder
+                println("gcsUri")
+                println(gcsUri)
+
+                // 3. Snapshotları temp dosyaya dönüştür
+                val frameFiles = if (video.snapshots.isNotEmpty()) {
+                    video.snapshots.mapNotNull { base64 ->
+                        base64.fromBase64ToBitmap()?.toTempFile(application)
+                    }
+                } else null
+
+                // 4. API'ye GCS URI ile istek gönder
                 val summary = withContext(Dispatchers.IO) {
-                    summaryRepo.uploadAudioForSummary(
-                        audioFile = audioFile,
-                        languageCodeStr = "tr-TR",
+                    summaryRepo.uploadAudioUriForSummary(
+                        gcsUri = gcsUri,
+                        languageCode = "tr-TR",
                         frames = frameFiles
                     )
                 }
 
-                println("videoişlemleri3")
-
-                // 3. Room’a kaydet
+                // 5. Room güncelle ve UI bildir
                 val updatedVideo = video.copy(summary = summary)
                 withContext(Dispatchers.IO) {
                     updateVideoUseCase(updatedVideo)
                 }
+                _videoStates.update { it + (video.id to UiState(isLoading = false, summary = summary)) }
 
-                println("room işlemi tamam.")
-
-                // 4. UI güncelle
-                _videoStates.update {
-                    it + (video.id to UiState(isLoading = false, summary = summary))
-                }
-
-                println("updatedVideo")
-                println(updatedVideo)
-
-                loadVideos(video.categoryId)
+                println("Özetleme tamamlandı: $summary")
 
             } catch (e: Exception) {
                 e.printStackTrace()
-
-                val errorMessage = buildString {
-                    append("Hata oluştu: ${e.message}")
-                    if (e.cause != null) append("\nNeden: ${e.cause}")
-                }
-
                 _videoStates.update {
-                    it + (video.id to UiState(isLoading = false, summary = errorMessage))
+                    it + (video.id to UiState(isLoading = false, summary = "Hata: ${e.message}"))
                 }
-
-                println("summary hatası: $errorMessage")
+                println("summary hatası: ${e.message}")
             }
         }
     }
+
 }

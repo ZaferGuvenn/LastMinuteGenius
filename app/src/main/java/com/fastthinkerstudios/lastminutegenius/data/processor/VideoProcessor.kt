@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import android.net.Uri
+import android.util.Log
 import com.arthenica.ffmpegkit.FFmpegKit
 import com.arthenica.ffmpegkit.ReturnCode
 import kotlinx.coroutines.delay
@@ -15,8 +16,7 @@ import javax.inject.Inject
 class VideoProcessor @Inject constructor(){
 
     fun extractAudioFile(context: Context, videoUri: Uri): File {
-
-        //videoyu geçici dosyaya kopyala
+        // 1. Videoyu geçici dosyaya kopyala
         val inputFile = File.createTempFile("input", ".mp4", context.cacheDir)
         context.contentResolver.openInputStream(videoUri)?.use { input ->
             FileOutputStream(inputFile).use { out ->
@@ -24,17 +24,18 @@ class VideoProcessor @Inject constructor(){
             }
         }
 
-        //çıkacak ses dosyasını belirle
-        val outputFile = File(context.cacheDir, "extracted_audio.wav")
+        // 2. Çıkacak ses dosyasını belirle (FLAC formatında)
+        val outputFile = File(context.cacheDir, "extracted_audio.flac")
         if (outputFile.exists()) outputFile.delete()
 
+        // 3. FLAC ses çıkarma komutu
         val command = arrayOf(
             "-y", // üzerine yaz
             "-i", inputFile.absolutePath,
-            "-vn", //no video
-            "-acodec", "pcm_s16le", //16 bit PCM
-            "-ar", "16000", // 16kHz
-            "-ac", "1", //mono
+            "-vn", // video çıkar
+            "-ac", "1", // mono ses (daha net STT için)
+            "-ar", "16000", // 16 kHz (Google STT önerisi)
+            "-c:a", "flac", // FLAC codec
             outputFile.absolutePath
         )
 
@@ -43,8 +44,13 @@ class VideoProcessor @Inject constructor(){
             throw IOException("FFmpegKit failed: code=${session.returnCode}")
         }
 
+        val fileSizeInMB = outputFile.length().toDouble() / (1024 * 1024)
+        Log.d("AudioExtract", "🎧 FLAC dosya boyutu: %.2f MB".format(fileSizeInMB))
+
+
         return outputFile
     }
+
 
     fun extractFrames(context: Context, videoUri: Uri): List<File> {
         val retriever = MediaMetadataRetriever()

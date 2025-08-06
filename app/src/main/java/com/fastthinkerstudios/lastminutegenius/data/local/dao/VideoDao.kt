@@ -24,4 +24,10 @@ interface VideoDao {
 
     @Delete
     suspend fun deleteVideo(video: VideoEntity)
+
+    @Query("SELECT summary FROM videos WHERE id= :videoId")
+    fun getSummaryByVideoId(videoId:Int): Flow<String?>
+
+    @Query("UPDATE videos SET summary = :newSummary WHERE id = :videoId")
+    suspend fun updateSummaryByVideoId(videoId: Int, newSummary: String)
 }
